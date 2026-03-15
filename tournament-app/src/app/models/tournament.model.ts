@@ -23,3 +23,13 @@ export interface TournamentState {
   targetNumber: number | null;
   phase: 'idle' | 'selecting-game' | 'rolling' | 'playing' | 'tiebreaker';
 }
+
+export interface LifetimeRecord {
+  gameName: string;
+  rules: string;
+  currentChamp: PlayerName | string;
+  jasonWins: number;
+  mikeWins: number;
+  gregWins: number;
+  timesPlayed: number;
+}

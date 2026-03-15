@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Player, PlayerName, TournamentState, GameRecord } from '../models/tournament.model';
 import { StorageService } from './storage';
+import { LifetimeRecord } from '../models/tournament.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +25,15 @@ export class GameEngineService {
   public gameState$ = new BehaviorSubject<TournamentState>(this.stateData);
   public dookieDabAlert$ = new BehaviorSubject<PlayerName | null>(null);
 
+  private lifetimeStats: LifetimeRecord[] = [];
+  public lifetimeStats$ = new BehaviorSubject<LifetimeRecord[]>([]);
+
   constructor(private storage: StorageService) {
     // 1. Boot-up Check: Is there a game in progress saved in the browser?
     const savedPlayers = this.storage.loadPlayers();
     const savedHistory = this.storage.loadHistory();
-
+    this.lifetimeStats = this.storage.loadLifetimeStats();
+    this.lifetimeStats$.next(this.lifetimeStats);
     if (savedPlayers) {
       this.playersData = savedPlayers;
       this.players$.next(this.playersData);
@@ -78,6 +83,34 @@ export class GameEngineService {
     this.playersData = currentPlayers;
     this.players$.next(this.playersData);
     this.history$.next(this.matchHistory);
+    // --- LIFETIME STATS UPDATE ---
+    // 1. See if this exact game/rule combo already exists in the Hall of Records
+    let existingGameIndex = this.lifetimeStats.findIndex(
+      (record) => record.gameName.toLowerCase() === gameName.toLowerCase() && record.rules.toLowerCase() === rules.toLowerCase()
+    );
+
+    if (existingGameIndex !== -1) {
+      // It exists! Increment the stats.
+      this.lifetimeStats[existingGameIndex].timesPlayed += 1;
+      this.lifetimeStats[existingGameIndex].currentChamp = winner;
+      if (winner === 'Mike') this.lifetimeStats[existingGameIndex].mikeWins += 1;
+      if (winner === 'Greg') this.lifetimeStats[existingGameIndex].gregWins += 1;
+      if (winner === 'Jason') this.lifetimeStats[existingGameIndex].jasonWins += 1;
+    } else {
+      // It's a brand new game! Add it to the Hall of Records.
+      const newLifetimeRecord: LifetimeRecord = {
+        gameName, rules, currentChamp: winner,
+        mikeWins: winner === 'Mike' ? 1 : 0,
+        gregWins: winner === 'Greg' ? 1 : 0,
+        jasonWins: winner === 'Jason' ? 1 : 0,
+        timesPlayed: 1
+      };
+      this.lifetimeStats.push(newLifetimeRecord);
+    }
+    
+    // Save the lifetime stats to local storage and broadcast
+    this.storage.saveLifetimeStats(this.lifetimeStats);
+    this.lifetimeStats$.next(this.lifetimeStats);
     
     this.setPhase('selecting-game');
   }

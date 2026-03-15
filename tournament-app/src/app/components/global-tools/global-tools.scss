@@ -1,16 +1,18 @@
 .tools-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly; // Distributes them perfectly inside the box
+  gap: 6px; /* Let flexbox handle the spacing perfectly */
   width: 100%;
-  height: 100%; 
+  height: 100%;
+  overflow-y: auto; /* Adds a scrollbar ONLY if the box gets too full */
+  padding-right: 4px; /* Keeps the scrollbar from overlapping text */
 }
 
 h2 {
   text-align: center;
-  margin: 0 0 5px 0;
+  margin: 0;
   color: #4CAF50;
-  font-size: 1.4rem;
+  font-size: 1.2rem; /* Slightly smaller header */
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -20,17 +22,16 @@ h2 {
   flex-direction: column;
   align-items: center;
   background: rgba(0, 0, 0, 0.2);
-  padding: 8px;
-  border-radius: 8px;
-  margin-bottom: 5px;
+  padding: 6px; /* Tighter padding */
+  border-radius: 6px;
 }
 
 .action-btn {
   width: 100%;
-  padding: 8px;
+  padding: 6px; /* Thinner buttons */
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.95rem; /* Slightly smaller font */
   font-weight: bold;
   cursor: pointer;
   color: white;
@@ -39,53 +40,48 @@ h2 {
   &:hover { filter: brightness(1.2); }
   &.d60-btn { background-color: #9c27b0; }
   &.order-btn { background-color: #008cba; }
+  &.nuke-btn { background-color: #d32f2f; }
 }
 
-// Compact d60 Result
+/* Compact d60 Result */
 .d60-result-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 8px;
+  margin-top: 5px;
 
-  .label { font-size: 0.9rem; color: #a0a0b5; }
+  .label { font-size: 0.8rem; color: #a0a0b5; }
   .roll-result {
-    font-size: 1.2rem; 
+    font-size: 1rem; 
     font-weight: bold; 
     color: #fff;
     background: #9c27b0; 
-    padding: 2px 12px; 
+    padding: 2px 10px; 
     border-radius: 12px;
   }
 }
 
-// Compact Turn Order Chips
+/* Compact Turn Order Chips */
 .turn-order-row {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap; /* Allows chips to wrap if they need to */
   gap: 5px;
-  margin-top: 8px;
+  margin-top: 5px;
   width: 100%;
 
   .player-chip {
     background: #008cba;
-    padding: 3px 8px;
+    padding: 2px 6px;
     border-radius: 4px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: white;
   }
 }
 
-// Make the container look like a warning area
 .danger-zone {
   border: 1px solid #d32f2f;
   background: rgba(211, 47, 47, 0.1);
-  margin-top: auto; // Pushes it to the bottom
-}
-
-// Make the button red
-.action-btn.nuke-btn {
-  background-color: #d32f2f;
-  &:hover { background-color: #f44336; }
+  margin-top: auto; /* Magically forces the nuke button to the very bottom */
 }
