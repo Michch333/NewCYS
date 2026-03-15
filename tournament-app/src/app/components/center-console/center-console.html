@@ -5,8 +5,22 @@
   </button>
 
   <ng-container *ngIf="!viewingHistory">
+    
     <div class="phase-container" *ngIf="currentState.phase === 'selecting-game'">
       <h1>Next Match</h1>
+      
+      <div class="input-group quick-load-group">
+        <label>Quick Load Past Game:</label>
+        <select #historySelect (change)="loadHistoricalGame(historySelect.value); historySelect.value=''">
+          <option value="" selected>-- Pick from Hall of Records --</option>
+          <option *ngFor="let game of sortedLifetimeStats; let i = index" [value]="i">
+            {{ game.gameName }} ({{ game.rules }})
+          </option>
+        </select>
+      </div>
+
+      <div class="divider-text">- OR TYPE A NEW ONE -</div>
+
       <div class="input-group">
         <label>Video Game Title:</label>
         <input type="text" [(ngModel)]="gameName" placeholder="e.g. Fortnite" />
@@ -23,7 +37,9 @@
         <h2>Now Playing: {{ gameName }}</h2>
         <p class="rules-text" *ngIf="gameRules">Rules: {{ gameRules }}</p>
       </div>
+      
       <h3>Enter Results</h3>
+      
       <div class="scoring-grid">
         <div class="score-row gold">
           <label>1st Place (1 pt):</label>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { GameEngineService } from '../../services/game-engine'; 
-import { PlayerName, TournamentState, GameRecord } from '../../models/tournament.model'; // Added GameRecord
+import { PlayerName, TournamentState, GameRecord, LifetimeRecord } from '../../models/tournament.model'; // Added LifetimeRecord
 
 @Component({
   selector: 'app-center-console',
@@ -14,9 +14,11 @@ import { PlayerName, TournamentState, GameRecord } from '../../models/tournament
 export class CenterConsoleComponent implements OnInit {
   currentState!: TournamentState;
   
-  // NEW: History State
   matchHistory: GameRecord[] = [];
   viewingHistory: boolean = false; 
+
+  // NEW: Store the sorted historical games for the dropdown
+  sortedLifetimeStats: LifetimeRecord[] = [];
   
   gameName: string = '';
   gameRules: string = '';
@@ -32,12 +34,28 @@ export class CenterConsoleComponent implements OnInit {
       this.currentState = state;
     });
 
-    // NEW: Subscribe to the history feed
     this.gameEngine.history$.subscribe(history => {
       this.matchHistory = history;
     });
+
+    // NEW: Grab the lifetime stats, clone the array, and sort them alphabetically!
+    this.gameEngine.lifetimeStats$.subscribe(stats => {
+      this.sortedLifetimeStats = [...stats].sort((a, b) => a.gameName.localeCompare(b.gameName));
+    });
     
     this.gameEngine.setPhase('selecting-game');
+  }
+
+  // NEW: Auto-fill function when you select from the dropdown
+  loadHistoricalGame(indexStr: string) {
+    if (!indexStr) return; // Ignore if they select the placeholder
+    
+    const index = parseInt(indexStr, 10);
+    const selectedRecord = this.sortedLifetimeStats[index];
+    
+    // Auto-fill the text boxes
+    this.gameName = selectedRecord.gameName;
+    this.gameRules = selectedRecord.rules;
   }
 
   toggleHistory() {
@@ -64,7 +82,6 @@ export class CenterConsoleComponent implements OnInit {
       return;
     }
 
-    // UPDATED: Now passing the game name and rules to the engine!
     this.gameEngine.commitGameResults(this.gameName, this.gameRules, this.firstPlace, this.secondPlace, this.thirdPlace);
     
     this.gameName = '';
