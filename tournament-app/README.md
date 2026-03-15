@@ -1,59 +1,36 @@
-# TournamentApp
+# 🏆 Game Night Tournament Tracker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.2.
+A custom-built, fully reactive Angular application designed to track games, scores, and specific house-rule punishments for a 3-player gaming tournament.
 
-## Development server
+Built with a "Mario Party" style interface, this app serves as the central hub for game night, managing everything from randomizing turn orders to permanently logging match history.
 
-To start a local development server, run:
+## ✨ Features
 
-```bash
-ng serve
-```
+* **The "Mario Party" Dashboard:** A 4-corner CSS Grid layout keeping the three players (Mike, Greg, and Jason) locked in the corners while the central console manages the active game state.
+* **Live Score & Threat Tracking:** Real-time updates for points (1st place) and consecutive 3rd place finishes. 
+* **🚨 The Dookie Dab Penalty:** A screen-locking, violently flashing modal that automatically triggers when a player suffers three consecutive last-place finishes. The tournament cannot proceed until the punishment is acknowledged!
+* **Hall of Records (Data Persistence):** Match history and player stats are saved directly to the browser's `localStorage`. If you accidentally close the tab or refresh the page, zero data is lost.
+* **Global Tools Panel:**
+    * **d60 Roller:** A quick digital dice roller for tiebreakers.
+    * **Turn Randomizer:** Instantly shuffles the players to determine draft or selection order.
+    * **☢️ Nuke Tournament:** A protected hard-reset button to wipe the local storage and reset the board for a fresh game night.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🛠️ Tech Stack
 
-## Code scaffolding
+* **Framework:** Angular (Standalone Components)
+* **State Management:** RxJS (`BehaviorSubject` for reactive UI updates across isolated components)
+* **Styling:** SCSS (Custom Flexbox & Grid architectures, CSS animations)
+* **Storage:** Browser LocalStorage API (with SSR bypassing)
+* **Language:** TypeScript / HTML5
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🚀 Getting Started
 
-```bash
-ng generate component component-name
-```
+To get this project running on your local machine:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) and the [Angular CLI](https://angular.io/cli) installed.
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone <your-github-repo-url>
