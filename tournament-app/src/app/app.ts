@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerCardComponent } from './components/player-card/player-card'; 
-import { Player, PlayerName } from './models/tournament.model'; // <-- Added PlayerName here!
+import { Player, PlayerName } from './models/tournament.model';
 import { GameEngineService } from './services/game-engine';
-import { DookieDabModalComponent } from './components/dookie-dab-modal/dookie-dab-modal'; 
+import { DookieDabModalComponent } from './components/dookie-dab-modal/dookie-dab-modal';
+import { GlobalToolsComponent } from './components/global-tools/global-tools';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, PlayerCardComponent, DookieDabModalComponent], 
+  imports: [CommonModule, PlayerCardComponent, DookieDabModalComponent, GlobalToolsComponent], 
   templateUrl: './app.html', 
   styleUrl: './app.scss'     
 })

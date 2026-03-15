@@ -1,1 +1,22 @@
-<p>global-tools works!</p>
+<div class="tools-container">
+  <h2>Quick Tools</h2>
+  
+  <div class="tool-section">
+    <button class="action-btn d60-btn" (click)="rollD60()">Roll d60</button>
+    
+    <div class="d60-result-row" *ngIf="currentRoll">
+      <span class="label">Result:</span>
+      <span class="roll-result">{{ currentRoll }}</span>
+    </div>
+  </div>
+
+  <div class="tool-section">
+    <button class="action-btn order-btn" (click)="randomizeOrder()">Random Order</button>
+    
+    <div class="turn-order-row" *ngIf="turnOrder.length > 0">
+      <span class="player-chip" *ngFor="let player of turnOrder">
+        {{ player }}
+      </span>
+    </div>
+  </div>
+</div>
