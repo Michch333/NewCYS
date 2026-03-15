@@ -1,106 +1,145 @@
 <div class="console-container">
   
   <button class="history-toggle-btn" (click)="toggleHistory()">
-    {{ viewingHistory ? '🔙 Back to Game' : '📜 View Records' }}
+    📜 View Records
   </button>
 
-  <ng-container *ngIf="!viewingHistory">
+  <div class="phase-container" *ngIf="currentState.phase === 'selecting-game'">
+    <h1>Next Match</h1>
     
-    <div class="phase-container" *ngIf="currentState.phase === 'selecting-game'">
-      <h1>Next Match</h1>
-      
-      <div class="input-group quick-load-group">
-        <label>Quick Load Past Game:</label>
-        <select #historySelect (change)="loadHistoricalGame(historySelect.value); historySelect.value=''">
-          <option value="" selected>-- Pick from Hall of Records --</option>
-          <option *ngFor="let game of sortedLifetimeStats; let i = index" [value]="i">
-            {{ game.gameName }} ({{ game.rules }})
-          </option>
+    <div class="input-group quick-load-group">
+      <label>Quick Load Past Game:</label>
+      <select #historySelect (change)="loadHistoricalGame(historySelect.value); historySelect.value=''">
+        <option value="" selected>-- Pick from Hall of Records --</option>
+        <option *ngFor="let game of sortedLifetimeStats; let i = index" [value]="i">
+          {{ game.gameName }} ({{ game.rules }})
+        </option>
+      </select>
+    </div>
+
+    <div class="divider-text">- OR TYPE A NEW ONE -</div>
+
+    <div class="input-group">
+      <label>Video Game Title:</label>
+      <input type="text" [(ngModel)]="gameName" (input)="onManualInputChange()" placeholder="e.g. Fortnite" />
+    </div>
+    <div class="input-group">
+      <label>House Rules (Optional):</label>
+      <textarea [(ngModel)]="gameRules" (input)="onManualInputChange()" placeholder="e.g. No builds..."></textarea>
+    </div>
+
+    <div class="game-stats-card" *ngIf="selectedGameStats">
+      <div class="stat-header">
+        <span class="champ-crown">👑 Reigning Champ: {{ selectedGameStats.currentChamp }}</span>
+        <span class="times-played">Played {{ selectedGameStats.timesPlayed }} times</span>
+      </div>
+      <div class="stat-breakdown">
+        <div class="stat-box mike">Mike: {{ selectedGameStats.mikeWins }}</div>
+        <div class="stat-box greg">Greg: {{ selectedGameStats.gregWins }}</div>
+        <div class="stat-box jason">Jason: {{ selectedGameStats.jasonWins }}</div>
+      </div>
+    </div>
+
+    <button class="action-btn start-btn" (click)="startGame()">LOCK IT IN</button>
+  </div>  
+    
+  <div class="phase-container" *ngIf="currentState.phase === 'playing'">
+    <div class="active-game-header">
+      <h2>Now Playing: {{ gameName }}</h2>
+      <p class="rules-text" *ngIf="gameRules">Rules: {{ gameRules }}</p>
+    </div>
+    
+    <h3>Enter Results</h3>
+    
+    <div class="scoring-grid">
+      <div class="score-row gold">
+        <label>1st Place (1 pt):</label>
+        <select [(ngModel)]="firstPlace" (ngModelChange)="onPlayerSelected('first', $event)">
+          <option value="" disabled>Select Winner</option>
+          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
         </select>
       </div>
-
-      <div class="divider-text">- OR TYPE A NEW ONE -</div>
-
-     <div class="input-group">
-        <label>Video Game Title:</label>
-        <input type="text" [(ngModel)]="gameName" (input)="onManualInputChange()" placeholder="e.g. Fortnite" />
+      <div class="score-row silver">
+        <label>2nd Place (Safe):</label>
+        <select [(ngModel)]="secondPlace" (ngModelChange)="onPlayerSelected('second', $event)">
+          <option value="" disabled>Select Runner-Up</option>
+          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
+        </select>
       </div>
-      <div class="input-group">
-        <label>House Rules (Optional):</label>
-        <textarea [(ngModel)]="gameRules" (input)="onManualInputChange()" placeholder="e.g. No builds..."></textarea>
-      </div>
-
-      <div class="game-stats-card" *ngIf="selectedGameStats">
-        <div class="stat-header">
-          <span class="champ-crown">👑 Reigning Champ: {{ selectedGameStats.currentChamp }}</span>
-          <span class="times-played">Played {{ selectedGameStats.timesPlayed }} times</span>
-        </div>
-        <div class="stat-breakdown">
-          <div class="stat-box mike">Mike: {{ selectedGameStats.mikeWins }}</div>
-          <div class="stat-box greg">Greg: {{ selectedGameStats.gregWins }}</div>
-          <div class="stat-box jason">Jason: {{ selectedGameStats.jasonWins }}</div>
-        </div>
-      </div>
-
-      <button class="action-btn start-btn" (click)="startGame()">LOCK IT IN</button>
-    </div>  
-      
-    <div class="phase-container" *ngIf="currentState.phase === 'playing'">
-      <div class="active-game-header">
-        <h2>Now Playing: {{ gameName }}</h2>
-        <p class="rules-text" *ngIf="gameRules">Rules: {{ gameRules }}</p>
-      </div>
-      
-      <h3>Enter Results</h3>
-      
-      <div class="scoring-grid">
-        <div class="score-row gold">
-          <label>1st Place (1 pt):</label>
-          <select [(ngModel)]="firstPlace" (ngModelChange)="onPlayerSelected('first', $event)">
-            <option value="" disabled>Select Winner</option>
-            <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
-          </select>
-        </div>
-        
-        <div class="score-row silver">
-          <label>2nd Place (Safe):</label>
-          <select [(ngModel)]="secondPlace" (ngModelChange)="onPlayerSelected('second', $event)">
-            <option value="" disabled>Select Runner-Up</option>
-            <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
-          </select>
-        </div>
-        
-        <div class="score-row bronze">
-          <label>3rd Place (+1 Strike):</label>
-          <select [(ngModel)]="thirdPlace" (ngModelChange)="onPlayerSelected('third', $event)">
-            <option value="" disabled>Select Loser</option>
-            <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
-          </select>
-        </div>
-      </div>
-      <button class="action-btn submit-btn" (click)="submitResults()">COMMIT RESULTS</button>
-    </div>
-
-  </ng-container>
-
-  <div class="phase-container history-view" *ngIf="viewingHistory">
-    <h1>Tournament Records</h1>
-    
-    <p class="empty-state" *ngIf="matchHistory.length === 0">No games played yet!</p>
-
-    <div class="history-list">
-      <div class="history-card" *ngFor="let match of matchHistory; let i = index">
-        <div class="match-header">
-          <span class="match-number">Match {{ i + 1 }}</span>
-          <span class="match-title">{{ match.gameName }}</span>
-        </div>
-        <div class="match-results">
-          <span class="medal gold">🥇 {{ match.winner }}</span>
-          <span class="medal silver">🥈 {{ match.secondPlace }}</span>
-          <span class="medal bronze">💩 {{ match.thirdPlace }}</span>
-        </div>
+      <div class="score-row bronze">
+        <label>3rd Place (+1 Strike):</label>
+        <select [(ngModel)]="thirdPlace" (ngModelChange)="onPlayerSelected('third', $event)">
+          <option value="" disabled>Select Loser</option>
+          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
+        </select>
       </div>
     </div>
+    <button class="action-btn submit-btn" (click)="submitResults()">COMMIT RESULTS</button>
   </div>
 
+</div>
+
+
+<div class="modal-overlay" *ngIf="viewingHistory" (click)="toggleHistory()">
+  
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h1>Tournament Records</h1>
+      <button class="close-btn" (click)="toggleHistory()">✖</button>
+    </div>
+
+    <div class="history-tabs">
+      <button [class.active]="activeHistoryTab === 'current'" (click)="setHistoryTab('current')">
+        Tonight's Matches
+      </button>
+      <button [class.active]="activeHistoryTab === 'lifetime'" (click)="setHistoryTab('lifetime')">
+        Lifetime Database
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="tab-content" *ngIf="activeHistoryTab === 'current'">
+        <p class="empty-state" *ngIf="matchHistory.length === 0">No games played yet tonight!</p>
+        <div class="history-list">
+          <div class="history-card" *ngFor="let match of matchHistory; let i = index">
+            <div class="match-header">
+              <span class="match-number">Match {{ i + 1 }}</span>
+              <span class="match-title">{{ match.gameName }}</span>
+            </div>
+            <div class="match-results">
+              <span class="medal gold">🥇 {{ match.winner }}</span>
+              <span class="medal silver">🥈 {{ match.secondPlace }}</span>
+              <span class="medal bronze">💩 {{ match.thirdPlace }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" *ngIf="activeHistoryTab === 'lifetime'">
+      
+      <div class="search-container">
+        <input type="text" [(ngModel)]="searchQuery" placeholder="🔍 Search games or rules..." class="search-input" />
+      </div>
+
+      <div class="history-list">
+        <div class="lifetime-card" *ngFor="let stat of filteredLifetimeStats">
+          
+          <div class="lifetime-header">
+            <span class="game-name">{{ stat.gameName }} <span class="rules" *ngIf="stat.rules">({{ stat.rules }})</span></span>
+            <span class="champ-crown" *ngIf="stat.currentChamp">👑 {{ stat.currentChamp }}</span>
+          </div>
+          
+          <div class="lifetime-stats-grid">
+            <div class="stat mike">M: {{ stat.mikeWins }}</div>
+            <div class="stat greg">G: {{ stat.gregWins }}</div>
+            <div class="stat jason">J: {{ stat.jasonWins }}</div>
+            <div class="stat total">Total: {{ stat.timesPlayed }}</div>
+          </div>
+          
+        </div>
+        
+        <p class="empty-state" *ngIf="filteredLifetimeStats.length === 0">No matching games found.</p>
+      </div>
+    </div>
 </div>

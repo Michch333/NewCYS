@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { GameEngineService } from '../../services/game-engine'; 
+import { GameEngineService } from '../../services/game-engine'; // Make sure this path matches your setup!
 import { PlayerName, TournamentState, GameRecord, LifetimeRecord } from '../../models/tournament.model';
 
 @Component({
@@ -17,9 +17,11 @@ export class CenterConsoleComponent implements OnInit {
   matchHistory: GameRecord[] = [];
   viewingHistory: boolean = false; 
   sortedLifetimeStats: LifetimeRecord[] = [];
-  
-  // NEW: The currently viewed scouting report
   selectedGameStats: LifetimeRecord | null = null;
+  
+  // --- MODAL TAB & SEARCH VARIABLES ---
+  activeHistoryTab: 'current' | 'lifetime' = 'current';
+  searchQuery: string = '';
   
   gameName: string = '';
   gameRules: string = '';
@@ -40,22 +42,35 @@ export class CenterConsoleComponent implements OnInit {
     this.gameEngine.setPhase('selecting-game');
   }
 
-  // UPDATED: Now saves the stats so we can display them!
+  // --- LIFETIME DATABASE SEARCH FILTER ---
+  get filteredLifetimeStats(): LifetimeRecord[] {
+    if (!this.searchQuery.trim()) {
+      return this.sortedLifetimeStats; 
+    }
+    const lowerQuery = this.searchQuery.toLowerCase();
+    return this.sortedLifetimeStats.filter(stat => 
+      stat.gameName.toLowerCase().includes(lowerQuery) || 
+      (stat.rules && stat.rules.toLowerCase().includes(lowerQuery))
+    );
+  }
+
+  setHistoryTab(tab: 'current' | 'lifetime') {
+    this.activeHistoryTab = tab;
+  }
+
   loadHistoricalGame(indexStr: string) {
     if (!indexStr) {
-      this.selectedGameStats = null; // Clear if they unselect
+      this.selectedGameStats = null;
       return; 
     }
-    
     const index = parseInt(indexStr, 10);
     const selectedRecord = this.sortedLifetimeStats[index];
     
     this.gameName = selectedRecord.gameName;
     this.gameRules = selectedRecord.rules;
-    this.selectedGameStats = selectedRecord; // <-- Save the stats for the UI
+    this.selectedGameStats = selectedRecord; 
   }
 
-  // NEW: Clear the stats card if someone manually edits the text boxes
   onManualInputChange() {
     this.selectedGameStats = null;
   }
@@ -72,19 +87,16 @@ export class CenterConsoleComponent implements OnInit {
     this.gameEngine.setPhase('playing');
   }
 
-  // NEW: Smart Swap and Auto-Fill Logic
+  // --- SMART SWAP & AUTO-FILL ---
   onPlayerSelected(changedPosition: 'first' | 'second' | 'third', newPlayer: PlayerName | '') {
     if (!newPlayer) return;
 
-    // 1. Swap Logic: If they were already in another position, clear that old position
     if (changedPosition !== 'first' && this.firstPlace === newPlayer) this.firstPlace = '';
     if (changedPosition !== 'second' && this.secondPlace === newPlayer) this.secondPlace = '';
     if (changedPosition !== 'third' && this.thirdPlace === newPlayer) this.thirdPlace = '';
 
-    // 2. Auto-Fill Logic: See exactly who has been assigned
     const assignedPlayers = [this.firstPlace, this.secondPlace, this.thirdPlace].filter(p => p !== '');
 
-    // If exactly 2 players are locked in, find the missing 3rd and assign them!
     if (assignedPlayers.length === 2) {
       const remainingPlayer = this.playerList.find(p => !assignedPlayers.includes(p)) as PlayerName | '';
       
@@ -108,12 +120,11 @@ export class CenterConsoleComponent implements OnInit {
 
     this.gameEngine.commitGameResults(this.gameName, this.gameRules, this.firstPlace, this.secondPlace, this.thirdPlace);
     
-    // Clear everything for the next round
     this.gameName = '';
     this.gameRules = '';
     this.firstPlace = '';
     this.secondPlace = '';
     this.thirdPlace = '';
-    this.selectedGameStats = null; // <-- Clear the stats card
+    this.selectedGameStats = null; 
   }
 }

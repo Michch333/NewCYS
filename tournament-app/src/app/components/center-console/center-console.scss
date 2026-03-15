@@ -235,4 +235,237 @@ select {
       &:last-child { margin-right: 0; }
     }
   }
+} // <-- This is the correct closing bracket for .game-stats-card
+/* Keep everything from .console-container down through .game-stats-card! */
+/* Just replace the old history styles at the bottom with this: */
+
+.history-toggle-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #1a1a2e;
+  color: #008cba;
+  border: 2px solid #008cba;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 10;
+  transition: all 0.2s;
+  &:hover { background: #008cba; color: white; }
+}
+
+/* ========================================== */
+/* MODAL OVERLAY & LAYOUT                     */
+/* ========================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Places it over EVERYTHING */
+  animation: fadeIn 0.2s ease-in;
+}
+
+.modal-content {
+  background: #161625;
+  border: 2px solid #008cba;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 900px; /* Massively wider! */
+  height: 85vh; /* Takes up most of the screen */
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+  animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+
+  h1 { color: white; margin: 0; }
+  
+  .close-btn {
+    background: transparent;
+    color: #a0a0b5;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    &:hover { color: #e94560; }
+  }
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px; /* Room for the scrollbar */
+}
+
+.empty-state { text-align: center; color: #888; font-style: italic; margin-top: 30px; }
+
+/* ========================================== */
+/* TABS & SEARCH                              */
+/* ========================================== */
+
+
+/* --- SEARCH BAR --- */
+.search-container {
+  margin-bottom: 15px;
+  
+  .search-input {
+    width: 100%;
+    background: #161625;
+    color: white;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.2s ease-in-out;
+
+    /* Glows green to match the lifetime database theme */
+    &:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+    }
+    
+    &::placeholder {
+      color: #888;
+      font-style: italic;
+    }
+  }
+}
+
+.history-tabs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+
+  button {
+    background: rgba(255, 255, 255, 0.05);
+    color: #a0a0b5;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 12px 25px;
+    border-radius: 8px;
+    transition: all 0.2s;
+
+    &:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+    
+    &.active {
+      color: white;
+      background: #008cba;
+      box-shadow: 0 0 10px rgba(0, 140, 186, 0.4);
+    }
+  }
+}
+
+.search-container {
+  margin-bottom: 20px;
+  
+  .search-input {
+    width: 100%;
+    background: #1a1a2e;
+    color: white;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 1.1rem;
+    &:focus { outline: none; border-color: #4CAF50; }
+  }
+}
+
+/* ========================================== */
+/* WIDE DATATABLE LISTS                       */
+/* ========================================== */
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Tonight's Match Styles */
+.history-card {
+  background: rgba(0,0,0,0.3);
+  border-left: 4px solid #008cba;
+  padding: 15px;
+  border-radius: 8px;
+
+  .match-header {
+    display: flex; justify-content: space-between;
+    margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 8px;
+    .match-number { color: #a0a0b5; font-weight: bold; }
+    .match-title { color: white; font-weight: bold; font-size: 1.1rem; }
+  }
+  .match-results {
+    display: flex; justify-content: space-between; font-size: 1.05rem; font-weight: bold;
+    .gold { color: #FFD700; } .silver { color: #C0C0C0; } .bronze { color: #CD7F32; }
+  }
+}
+
+/* Lifetime DB - Wide Row Layout */
+.lifetime-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border-left: 4px solid #4CAF50;
+  padding: 15px 20px;
+  border-radius: 8px;
+  transition: transform 0.1s;
+
+  &:hover { background: rgba(255, 255, 255, 0.05); }
+
+  .info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1; /* Takes up the left side */
+
+    .game-name { color: white; font-weight: bold; font-size: 1.2rem; }
+    .rules { color: #a0a0b5; font-style: italic; font-size: 0.95rem; }
+    .champ-crown { color: #FFD700; font-weight: bold; font-size: 0.9rem; margin-top: 4px; }
+  }
+
+  .stats-col {
+    display: flex;
+    gap: 15px;
+    
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 8px 15px;
+      border-radius: 20px; /* Looks like a sleek pill badge */
+      font-size: 0.95rem;
+      font-weight: bold;
+      min-width: 60px;
+      text-align: center;
+
+      &.mike { color: #ff6b6b; border: 1px solid rgba(255, 107, 107, 0.3); } 
+      &.greg { color: #4ecdc4; border: 1px solid rgba(78, 205, 196, 0.3); }
+      &.jason { color: #ffe66d; border: 1px solid rgba(255, 230, 109, 0.3); }
+      &.total { color: #a0a0b5; background: rgba(0,0,0,0.5); border: 1px solid #444; }
+    }
+  }
+}
+
+/* Modal Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
