@@ -1,1 +1,22 @@
-<p>player-card works!</p>
+<div class="card-content">
+  <h2>{{ player.name }}</h2>
+  
+  <div class="stats">
+    <div class="stat-row">
+      <span class="label">Points:</span>
+      <span class="value points">{{ player.points }} / 5</span>
+    </div>
+
+    <div class="stat-row" *ngIf="player.currentRoll !== null">
+      <span class="label">Current Roll:</span>
+      <span class="value roll">{{ player.currentRoll }}</span>
+    </div>
+  </div>
+
+  <div class="dookie-warning" *ngIf="player.consecutiveThirds > 0">
+    <span class="warning-icon">⚠️</span>
+    <span class="warning-text">
+      Dookie Threat: {{ player.consecutiveThirds }} / 3
+    </span>
+  </div>
+</div>

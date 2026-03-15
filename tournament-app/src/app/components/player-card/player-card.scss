@@ -1,0 +1,57 @@
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  h2 {
+    font-size: 2.5rem;
+    margin: 0 0 15px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+}
+
+.stats {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  font-size: 1.2rem;
+
+  .label {
+    color: #a0a0b5;
+  }
+  
+  .value {
+    font-weight: bold;
+    &.points { color: #4CAF50; }
+    &.roll { color: #FFC107; }
+  }
+}
+
+.dookie-warning {
+  background-color: rgba(255, 87, 34, 0.2);
+  border: 1px solid #FF5722;
+  color: #FF5722;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
