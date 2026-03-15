@@ -1,0 +1,104 @@
+// Variables for a dark gaming theme
+$bg-color: #1a1a2e;
+$card-bg: #16213e;
+$accent-color: #0f3460;
+$text-color: #e94560;
+$text-light: #ffffff;
+
+// The main 3x3 grid container
+.game-board {
+  display: grid;
+  // Creates 3 columns: 250px on the sides, remaining space in the middle
+  grid-template-columns: 250px 1fr 250px;
+  // Creates 3 rows: 250px on top/bottom, remaining space in the middle
+  grid-template-rows: 250px 1fr 250px;
+  gap: 20px;
+  
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 20px;
+  
+  background-color: $bg-color;
+  color: $text-light;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+// Shared styling for all 4 corners
+.corner-zone {
+  background-color: $card-bg;
+  border: 4px solid $accent-color;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h2 {
+    color: $text-color;
+    margin-top: 0;
+  }
+}
+
+// Placing the specific zones in the grid
+.top-left {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.top-right {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.bottom-left {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.bottom-right {
+  grid-column: 3;
+  grid-row: 3;
+  border-color: #4CAF50; // Give the tools a different border color
+}
+
+// The massive center console
+.center-console-zone {
+  grid-column: 2;
+  grid-row: 2;
+  
+  background-color: lighten($card-bg, 5%);
+  border-radius: 20px;
+  border: 2px dashed $text-color;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  .placeholder-box {
+    background-color: $bg-color;
+    padding: 20px 40px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+}
+
+// Simple button styling for the placeholder
+button {
+  background-color: $text-color;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 10px;
+
+  &:hover {
+    background-color: darken($text-color, 10%);
+  }
+}
