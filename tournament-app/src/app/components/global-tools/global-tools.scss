@@ -76,3 +76,16 @@ h2 {
     color: white;
   }
 }
+
+// Make the container look like a warning area
+.danger-zone {
+  border: 1px solid #d32f2f;
+  background: rgba(211, 47, 47, 0.1);
+  margin-top: auto; // Pushes it to the bottom
+}
+
+// Make the button red
+.action-btn.nuke-btn {
+  background-color: #d32f2f;
+  &:hover { background-color: #f44336; }
+}

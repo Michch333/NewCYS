@@ -90,4 +90,24 @@ export class GameEngineService {
   clearDookieDab() {
     this.dookieDabAlert$.next(null);
   }
+  // ☢️ THE NUKE METHOD
+  resetTournament() {
+    // 1. Wipe the local storage
+    this.storage.clearTournament();
+
+    // 2. Reset the local variables back to zero
+    this.playersData = {
+      'Mike': { name: 'Mike', points: 0, consecutiveThirds: 0, currentRoll: null },
+      'Greg': { name: 'Greg', points: 0, consecutiveThirds: 0, currentRoll: null },
+      'Jason': { name: 'Jason', points: 0, consecutiveThirds: 0, currentRoll: null }
+    };
+    this.matchHistory = [];
+
+    // 3. Broadcast the empty state to the UI
+    this.players$.next(this.playersData);
+    this.history$.next(this.matchHistory);
+    this.setPhase('selecting-game');
+    this.clearDookieDab();
+  }
+
 }
