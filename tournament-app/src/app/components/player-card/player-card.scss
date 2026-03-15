@@ -55,3 +55,146 @@
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
+
+/* --- TOURNAMENT BADGES --- */
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px 0;
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: #a0a0b5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+}
+
+.badge-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  
+  /* The Empty Slot Look */
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid #333;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  /* The Earned Gold Coin Look */
+  &.earned {
+    /* Shiny Gold Gradient */
+    background: radial-gradient(circle at 30% 30%, #ffe066, #f39c12);
+    border-color: #fffacd;
+    
+    /* Glowing Effect */
+    box-shadow: 0 0 12px rgba(243, 156, 18, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+    
+    /* Makes the earned badge pop out slightly larger */
+    transform: scale(1.15); 
+  }
+}
+
+/* --- DOOKIE THREAT METER --- */
+.dookie-warning {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(139, 69, 19, 0.2); /* Faint brown danger background */
+  border: 1px solid rgba(139, 69, 19, 0.5);
+  border-radius: 8px;
+  padding: 8px 15px;
+  margin-top: 15px;
+  animation: fadeIn 0.3s ease-in;
+
+  .warning-text {
+    font-size: 0.8rem;
+    color: #ffaa00;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+}
+
+.dookie-row {
+  display: flex;
+  gap: 10px;
+}
+
+.dookie-icon {
+  font-size: 1.6rem;
+  
+  /* The Empty Slot Look (Faded and Grey) */
+  filter: grayscale(100%) opacity(0.3);
+  transition: all 0.3s ease;
+
+  /* The Active Strike Look */
+  &.active {
+    filter: grayscale(0%) opacity(1);
+    animation: pulseDookie 1.2s infinite alternate;
+  }
+}
+
+/* Make the active poops gently throb and glow */
+@keyframes pulseDookie {
+  from { 
+    transform: scale(1); 
+    filter: drop-shadow(0 0 2px rgba(139, 69, 19, 0.4)); 
+  }
+  to { 
+    transform: scale(1.2); 
+    filter: drop-shadow(0 0 8px rgba(139, 69, 19, 0.9)); 
+  }
+}
+
+/* --- PANIC MODE (2 Strikes) --- */
+.dookie-warning.panic-mode {
+  background: rgba(220, 38, 38, 0.2); /* Angry red background */
+  border: 1px solid rgba(220, 38, 38, 0.8);
+  animation: nervousJitter 0.3s infinite; /* Constant shaking */
+
+  .warning-text {
+    color: #ff4444;
+    animation: textFlash 0.5s infinite alternate; /* Flashing red text */
+  }
+
+  .dookie-icon.active {
+    /* Overrides the normal pulse with a faster, red-glowing panic pulse */
+    animation: panicPulse 0.3s infinite alternate; 
+  }
+}
+
+/* The Anxiety Animations */
+@keyframes textFlash {
+  from { opacity: 1; text-shadow: 0 0 8px rgba(255, 68, 68, 0.8); }
+  to { opacity: 0.4; text-shadow: none; }
+}
+
+@keyframes panicPulse {
+  from { 
+    transform: scale(1); 
+    filter: drop-shadow(0 0 2px rgba(220, 38, 38, 0.5)); 
+  }
+  to { 
+    transform: scale(1.3); /* Poops get slightly bigger */
+    filter: drop-shadow(0 0 12px rgba(220, 38, 38, 1)); 
+  }
+}
+
+@keyframes nervousJitter {
+  0% { transform: translate(1px, 0); }
+  25% { transform: translate(-1px, 1px); }
+  50% { transform: translate(0, -1px); }
+  75% { transform: translate(1px, 1px); }
+  100% { transform: translate(-1px, 0); }
+}

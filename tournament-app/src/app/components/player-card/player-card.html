@@ -1,10 +1,15 @@
-<div class="card-content">
-  <h2>{{ player.name }}</h2>
+<div class="player-card" [ngClass]="player.name.toLowerCase()">
   
-  <div class="stats">
-    <div class="stat-row">
-      <span class="label">Points:</span>
-      <span class="value points">{{ player.points }} / 5</span>
+  <div class="card-content">
+    <h2>{{ player.name }}</h2>
+    
+    <div class="stats-section">
+      <span class="stat-label">Tournament Wins</span>
+      <div class="badge-row">
+        <div class="badge" *ngFor="let slot of tournamentGoal" 
+             [ngClass]="{'earned': player.points >= slot}">
+        </div>
+      </div>
     </div>
 
     <div class="stat-row" *ngIf="player.currentRoll !== null">
@@ -13,10 +18,20 @@
     </div>
   </div>
 
-  <div class="dookie-warning" *ngIf="player.consecutiveThirds > 0">
-    <span class="warning-icon">⚠️</span>
+  <div class="dookie-warning" 
+       *ngIf="player.consecutiveThirds > 0"
+       [ngClass]="{'panic-mode': player.consecutiveThirds === 2}">
+    
     <span class="warning-text">
-      Dookie Threat: {{ player.consecutiveThirds }} / 3
+      {{ player.consecutiveThirds === 2 ? '⚠️ CRITICAL THREAT ⚠️' : 'Dookie Threat' }}
     </span>
+    
+    <div class="dookie-row">
+      <span class="dookie-icon" *ngFor="let slot of dookieGoal" 
+            [ngClass]="{'active': player.consecutiveThirds >= slot}">
+        💩
+      </span>
+    </div>
   </div>
+
 </div>

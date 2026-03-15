@@ -12,4 +12,7 @@ import { Player } from '../../models/tournament.model';
 export class PlayerCardComponent {
   // The exclamation mark tells TypeScript we promise this will be provided by the parent
   @Input() player!: Player; 
+  
+  tournamentGoal = [1, 2, 3, 4, 5];
+  dookieGoal = [1, 2, 3];
 }
