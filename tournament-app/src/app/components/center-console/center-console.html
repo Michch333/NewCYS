@@ -1,57 +1,74 @@
 <div class="console-container">
   
-  <div class="phase-container" *ngIf="currentState.phase === 'selecting-game'">
-    <h1>Next Match</h1>
+  <button class="history-toggle-btn" (click)="toggleHistory()">
+    {{ viewingHistory ? '🔙 Back to Game' : '📜 View Records' }}
+  </button>
+
+  <ng-container *ngIf="!viewingHistory">
+    <div class="phase-container" *ngIf="currentState.phase === 'selecting-game'">
+      <h1>Next Match</h1>
+      <div class="input-group">
+        <label>Video Game Title:</label>
+        <input type="text" [(ngModel)]="gameName" placeholder="e.g. Fortnite" />
+      </div>
+      <div class="input-group">
+        <label>House Rules (Optional):</label>
+        <textarea [(ngModel)]="gameRules" placeholder="e.g. No builds..."></textarea>
+      </div>
+      <button class="action-btn start-btn" (click)="startGame()">LOCK IT IN</button>
+    </div>
+
+    <div class="phase-container" *ngIf="currentState.phase === 'playing'">
+      <div class="active-game-header">
+        <h2>Now Playing: {{ gameName }}</h2>
+        <p class="rules-text" *ngIf="gameRules">Rules: {{ gameRules }}</p>
+      </div>
+      <h3>Enter Results</h3>
+      <div class="scoring-grid">
+        <div class="score-row gold">
+          <label>1st Place (1 pt):</label>
+          <select [(ngModel)]="firstPlace">
+            <option value="" disabled>Select Winner</option>
+            <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+        <div class="score-row silver">
+          <label>2nd Place (Safe):</label>
+          <select [(ngModel)]="secondPlace">
+            <option value="" disabled>Select Runner-Up</option>
+            <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+        <div class="score-row bronze">
+          <label>3rd Place (+1 Strike):</label>
+          <select [(ngModel)]="thirdPlace">
+            <option value="" disabled>Select Loser</option>
+            <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+      </div>
+      <button class="action-btn submit-btn" (click)="submitResults()">COMMIT RESULTS</button>
+    </div>
+  </ng-container>
+
+  <div class="phase-container history-view" *ngIf="viewingHistory">
+    <h1>Tournament Records</h1>
     
-    <div class="input-group">
-      <label>Video Game Title:</label>
-      <input type="text" [(ngModel)]="gameName" placeholder="e.g. Mario Kart 8" />
-    </div>
+    <p class="empty-state" *ngIf="matchHistory.length === 0">No games played yet!</p>
 
-    <div class="input-group">
-      <label>House Rules (Optional):</label>
-      <textarea [(ngModel)]="gameRules" placeholder="e.g. No items, final destination..."></textarea>
-    </div>
-
-    <button class="action-btn start-btn" (click)="startGame()">LOCK IT IN</button>
-  </div>
-
-
-  <div class="phase-container" *ngIf="currentState.phase === 'playing'">
-    <div class="active-game-header">
-      <h2>Now Playing: {{ gameName }}</h2>
-      <p class="rules-text" *ngIf="gameRules">Rules: {{ gameRules }}</p>
-    </div>
-
-    <h3>Enter Results</h3>
-    
-    <div class="scoring-grid">
-      <div class="score-row gold">
-        <label>1st Place (1 pt):</label>
-        <select [(ngModel)]="firstPlace">
-          <option value="" disabled>Select Winner</option>
-          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
-        </select>
-      </div>
-
-      <div class="score-row silver">
-        <label>2nd Place (Safe):</label>
-        <select [(ngModel)]="secondPlace">
-          <option value="" disabled>Select Runner-Up</option>
-          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
-        </select>
-      </div>
-
-      <div class="score-row bronze">
-        <label>3rd Place (+1 Strike):</label>
-        <select [(ngModel)]="thirdPlace">
-          <option value="" disabled>Select Loser</option>
-          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
-        </select>
+    <div class="history-list">
+      <div class="history-card" *ngFor="let match of matchHistory; let i = index">
+        <div class="match-header">
+          <span class="match-number">Match {{ i + 1 }}</span>
+          <span class="match-title">{{ match.gameName }}</span>
+        </div>
+        <div class="match-results">
+          <span class="medal gold">🥇 {{ match.winner }}</span>
+          <span class="medal silver">🥈 {{ match.secondPlace }}</span>
+          <span class="medal bronze">💩 {{ match.thirdPlace }}</span>
+        </div>
       </div>
     </div>
-
-    <button class="action-btn submit-btn" (click)="submitResults()">COMMIT RESULTS</button>
   </div>
 
 </div>

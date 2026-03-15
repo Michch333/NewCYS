@@ -1,73 +1,92 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Player, PlayerName, TournamentState } from '../models/tournament.model';
+import { Player, PlayerName, TournamentState, GameRecord } from '../models/tournament.model';
+import { StorageService } from './storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameEngineService {
-  // 1. The Initial State of the Players
+  // Default fresh state
   private playersData: Record<PlayerName, Player> = {
     'Mike': { name: 'Mike', points: 0, consecutiveThirds: 0, currentRoll: null },
     'Greg': { name: 'Greg', points: 0, consecutiveThirds: 0, currentRoll: null },
     'Jason': { name: 'Jason', points: 0, consecutiveThirds: 0, currentRoll: null }
   };
 
-  // 2. The Broadcasters (Components will listen to these)
+  private matchHistory: GameRecord[] = [];
+
+  // Broadcasters
   public players$ = new BehaviorSubject<Record<PlayerName, Player>>(this.playersData);
+  public history$ = new BehaviorSubject<GameRecord[]>(this.matchHistory);
   
   private stateData: TournamentState = { targetNumber: null, phase: 'idle' };
   public gameState$ = new BehaviorSubject<TournamentState>(this.stateData);
-
-  // NEW: The Dookie Dab Alarm Bell!
   public dookieDabAlert$ = new BehaviorSubject<PlayerName | null>(null);
 
-  constructor() {}
+  constructor(private storage: StorageService) {
+    // 1. Boot-up Check: Is there a game in progress saved in the browser?
+    const savedPlayers = this.storage.loadPlayers();
+    const savedHistory = this.storage.loadHistory();
 
-  commitGameResults(winner: PlayerName, secondPlace: PlayerName, thirdPlace: PlayerName) {
-    // Deep copy: Create fresh objects for each player so Angular knows they actually changed!
+    if (savedPlayers) {
+      this.playersData = savedPlayers;
+      this.players$.next(this.playersData);
+    }
+    if (savedHistory.length > 0) {
+      this.matchHistory = savedHistory;
+      this.history$.next(this.matchHistory);
+    }
+  }
+
+  // UPDATED: Now takes gameName and rules to create a formal record!
+  commitGameResults(gameName: string, rules: string, winner: PlayerName, secondPlace: PlayerName, thirdPlace: PlayerName) {
     let currentPlayers = {
       'Mike': { ...this.playersData['Mike'] },
       'Greg': { ...this.playersData['Greg'] },
       'Jason': { ...this.playersData['Jason'] }
     };
 
-    // Winner gets a point and their dookie threat resets
     currentPlayers[winner].points += 1;
     currentPlayers[winner].consecutiveThirds = 0;
-
-    // Second place just escapes the dookie threat
     currentPlayers[secondPlace].consecutiveThirds = 0;
-
-    // Third place gets a strike!
     currentPlayers[thirdPlace].consecutiveThirds += 1;
 
-    // Check for the Dookie Dab
     if (currentPlayers[thirdPlace].consecutiveThirds === 3) {
-      console.log(`🚨 DOOKIE DAB ALERT FOR ${thirdPlace.toUpperCase()}! 🚨`);
-      
-      // NEW: Broadcast the victim's name to trigger the modal
       this.dookieDabAlert$.next(thirdPlace);
-      
-      // Reset back to 1 as per house rules
       currentPlayers[thirdPlace].consecutiveThirds = 1; 
     }
 
-    // Broadcast the new objects to the UI
+    // 2. Create the Game Record
+    const newRecord: GameRecord = {
+      id: Math.random().toString(36).substring(2, 9), // Quick random ID
+      gameName,
+      rules,
+      timestamp: Date.now(),
+      winner,
+      secondPlace,
+      thirdPlace
+    };
+
+    this.matchHistory.push(newRecord);
+
+    // 3. Save everything to LocalStorage!
+    this.storage.savePlayers(currentPlayers);
+    this.storage.saveHistory(this.matchHistory);
+
+    // 4. Broadcast the updates
     this.playersData = currentPlayers;
     this.players$.next(this.playersData);
+    this.history$.next(this.matchHistory);
     
-    // Move the game phase back to selecting the next game
     this.setPhase('selecting-game');
   }
 
-  // Helper method to change the phase of the center console
   setPhase(newPhase: TournamentState['phase']) {
     this.stateData.phase = newPhase;
     this.gameState$.next(this.stateData);
   }
 
-  // NEW: Helper method to clear the modal once the punishment is served
   clearDookieDab() {
     this.dookieDabAlert$.next(null);
   }

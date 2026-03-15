@@ -42,9 +42,4 @@ export class AppComponent implements OnInit {
   dismissDookieModal() {
     this.gameEngine.clearDookieDab();
   }
-
-  testSimulateGame() {
-    console.log('🔘 Button was clicked!');
-    this.gameEngine.commitGameResults('Mike', 'Greg', 'Jason');
-  }
 }
