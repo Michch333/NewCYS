@@ -1,0 +1,59 @@
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; // Ensures this sits on top of EVERYTHING
+}
+
+.punishment-box {
+  background: #2a0a0a;
+  border: 6px solid #ff2a2a;
+  border-radius: 20px;
+  padding: 50px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 50px rgba(255, 42, 42, 0.6);
+  animation: pulseBox 1s infinite alternate;
+
+  .siren {
+    font-size: 5rem;
+    animation: spinSiren 2s infinite linear;
+  }
+
+  h1 { color: #ff2a2a; font-size: 3rem; margin: 10px 0; }
+  
+  .victim-name {
+    font-size: 5rem;
+    color: #ffd700;
+    margin: 0;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+
+  p { font-size: 1.5rem; color: #ccc; margin-bottom: 40px; }
+
+  .resume-btn {
+    background: #ff2a2a; color: white;
+    font-size: 1.2rem; font-weight: bold;
+    padding: 15px 30px; border: none; border-radius: 8px;
+    cursor: pointer; text-transform: uppercase;
+    transition: background 0.2s;
+
+    &:hover { background: #ff5555; }
+  }
+}
+
+@keyframes pulseBox {
+  0% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 42, 42, 0.4); }
+  100% { transform: scale(1.05); box-shadow: 0 0 80px rgba(255, 42, 42, 0.8); }
+}
+
+@keyframes spinSiren {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(15deg) scale(1.2); }
+  100% { transform: rotate(0deg) scale(1); }
+}
