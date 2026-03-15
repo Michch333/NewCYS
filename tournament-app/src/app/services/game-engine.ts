@@ -19,6 +19,9 @@ export class GameEngineService {
   private stateData: TournamentState = { targetNumber: null, phase: 'idle' };
   public gameState$ = new BehaviorSubject<TournamentState>(this.stateData);
 
+  // NEW: The Dookie Dab Alarm Bell!
+  public dookieDabAlert$ = new BehaviorSubject<PlayerName | null>(null);
+
   constructor() {}
 
   commitGameResults(winner: PlayerName, secondPlace: PlayerName, thirdPlace: PlayerName) {
@@ -42,6 +45,10 @@ export class GameEngineService {
     // Check for the Dookie Dab
     if (currentPlayers[thirdPlace].consecutiveThirds === 3) {
       console.log(`🚨 DOOKIE DAB ALERT FOR ${thirdPlace.toUpperCase()}! 🚨`);
+      
+      // NEW: Broadcast the victim's name to trigger the modal
+      this.dookieDabAlert$.next(thirdPlace);
+      
       // Reset back to 1 as per house rules
       currentPlayers[thirdPlace].consecutiveThirds = 1; 
     }
@@ -58,5 +65,10 @@ export class GameEngineService {
   setPhase(newPhase: TournamentState['phase']) {
     this.stateData.phase = newPhase;
     this.gameState$.next(this.stateData);
+  }
+
+  // NEW: Helper method to clear the modal once the punishment is served
+  clearDookieDab() {
+    this.dookieDabAlert$.next(null);
   }
 }

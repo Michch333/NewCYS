@@ -1,1 +1,12 @@
-<p>dookie-dab-modal works!</p>
+<div class="overlay">
+  <div class="punishment-box">
+    <div class="siren">🚨</div>
+    <h1>DOOKIE DAB PENALTY</h1>
+    <h2 class="victim-name">{{ victim | uppercase }}</h2>
+    <p>has suffered 3 consecutive 3rd place finishes!</p>
+    
+    <button class="resume-btn" (click)="closeModal()">
+      PUNISHMENT COMPLETE (RESUME GAME)
+    </button>
+  </div>
+</div>

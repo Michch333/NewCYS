@@ -1,30 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { PlayerCardComponent } from './components/player-card/player-card'; // (Check your path if needed!)
-import { Player } from './models/tournament.model';
-import { GameEngineService } from './services/game-engine'; 
+import { CommonModule } from '@angular/common';
+import { PlayerCardComponent } from './components/player-card/player-card'; 
+import { Player, PlayerName } from './models/tournament.model'; // <-- Added PlayerName here!
+import { GameEngineService } from './services/game-engine';
+import { DookieDabModalComponent } from './components/dookie-dab-modal/dookie-dab-modal'; 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [PlayerCardComponent], 
+  imports: [CommonModule, PlayerCardComponent, DookieDabModalComponent], 
   templateUrl: './app.html', 
   styleUrl: './app.scss'     
 })
 export class AppComponent implements OnInit {
+  // 1. All class variables go at the top
   mike!: Player;
   greg!: Player;
   jason!: Player;
+  activeVictim: PlayerName | null = null;
 
+  // 2. Constructor
   constructor(private gameEngine: GameEngineService) {}
 
+  // 3. Lifecycle hooks
   ngOnInit() {
-    // This should fire immediately when the app loads, and every time a score changes
     this.gameEngine.players$.subscribe(playersData => {
-      console.log('📡 UI received updated players:', playersData);
       this.mike = playersData['Mike'];
       this.greg = playersData['Greg'];
       this.jason = playersData['Jason'];
     });
+
+    // Listen for the alarm bell!
+    this.gameEngine.dookieDabAlert$.subscribe(victim => {
+      this.activeVictim = victim;
+    });
+  }
+
+  // 4. Custom Methods
+  dismissDookieModal() {
+    this.gameEngine.clearDookieDab();
   }
 
   testSimulateGame() {

@@ -24,4 +24,10 @@
     <button (click)="testSimulateGame()">Simulate Game</button>
   </section>
 
+  <app-dookie-dab-modal 
+    *ngIf="activeVictim" 
+    [victim]="activeVictim!"
+    (acknowledge)="dismissDookieModal()">
+  </app-dookie-dab-modal>
+
 </main>
