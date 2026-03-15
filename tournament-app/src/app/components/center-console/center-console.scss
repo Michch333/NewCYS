@@ -1,0 +1,88 @@
+.console-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.phase-container {
+  width: 90%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.3s ease-in;
+
+  h1, h2, h3 { color: #e94560; margin: 0; text-align: center; }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label { font-weight: bold; color: #a0a0b5; }
+  
+  input, textarea {
+    background: #1a1a2e; color: white;
+    border: 2px solid #0f3460; border-radius: 8px;
+    padding: 12px; font-size: 1.1rem;
+    font-family: inherit; resize: none;
+    
+    &:focus { outline: none; border-color: #e94560; }
+  }
+}
+
+.active-game-header {
+  background: rgba(0,0,0,0.3);
+  padding: 15px; border-radius: 8px; border-left: 4px solid #e94560;
+  
+  .rules-text { font-style: italic; color: #ccc; margin-top: 10px; }
+}
+
+.scoring-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.2);
+
+  label { font-weight: bold; font-size: 1.1rem; }
+  
+  select {
+    padding: 8px; border-radius: 6px;
+    background: #1a1a2e; color: white; border: 1px solid #555;
+    font-size: 1rem; cursor: pointer; min-width: 150px;
+  }
+
+  &.gold { border-left: 5px solid #FFD700; color: #FFD700; }
+  &.silver { border-left: 5px solid #C0C0C0; color: #C0C0C0; }
+  &.bronze { border-left: 5px solid #CD7F32; color: #CD7F32; }
+}
+
+.action-btn {
+  padding: 15px; border: none; border-radius: 8px;
+  font-size: 1.2rem; font-weight: bold; color: white;
+  cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+  transition: transform 0.1s, filter 0.2s;
+
+  &:hover { filter: brightness(1.2); }
+  &:active { transform: scale(0.98); }
+
+  &.start-btn { background: #008cba; }
+  &.submit-btn { background: #4CAF50; margin-top: 10px; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
