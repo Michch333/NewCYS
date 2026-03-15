@@ -5,11 +5,12 @@ import { Player, PlayerName } from './models/tournament.model';
 import { GameEngineService } from './services/game-engine';
 import { DookieDabModalComponent } from './components/dookie-dab-modal/dookie-dab-modal';
 import { GlobalToolsComponent } from './components/global-tools/global-tools';
+import { CenterConsoleComponent } from './components/center-console/center-console'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, PlayerCardComponent, DookieDabModalComponent, GlobalToolsComponent], 
+  imports: [CommonModule, PlayerCardComponent, DookieDabModalComponent, GlobalToolsComponent, CenterConsoleComponent], 
   templateUrl: './app.html', 
   styleUrl: './app.scss'     
 })

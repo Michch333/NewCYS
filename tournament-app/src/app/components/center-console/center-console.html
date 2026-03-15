@@ -1,1 +1,57 @@
-<p>center-console works!</p>
+<div class="console-container">
+  
+  <div class="phase-container" *ngIf="currentState.phase === 'selecting-game'">
+    <h1>Next Match</h1>
+    
+    <div class="input-group">
+      <label>Video Game Title:</label>
+      <input type="text" [(ngModel)]="gameName" placeholder="e.g. Mario Kart 8" />
+    </div>
+
+    <div class="input-group">
+      <label>House Rules (Optional):</label>
+      <textarea [(ngModel)]="gameRules" placeholder="e.g. No items, final destination..."></textarea>
+    </div>
+
+    <button class="action-btn start-btn" (click)="startGame()">LOCK IT IN</button>
+  </div>
+
+
+  <div class="phase-container" *ngIf="currentState.phase === 'playing'">
+    <div class="active-game-header">
+      <h2>Now Playing: {{ gameName }}</h2>
+      <p class="rules-text" *ngIf="gameRules">Rules: {{ gameRules }}</p>
+    </div>
+
+    <h3>Enter Results</h3>
+    
+    <div class="scoring-grid">
+      <div class="score-row gold">
+        <label>1st Place (1 pt):</label>
+        <select [(ngModel)]="firstPlace">
+          <option value="" disabled>Select Winner</option>
+          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
+        </select>
+      </div>
+
+      <div class="score-row silver">
+        <label>2nd Place (Safe):</label>
+        <select [(ngModel)]="secondPlace">
+          <option value="" disabled>Select Runner-Up</option>
+          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
+        </select>
+      </div>
+
+      <div class="score-row bronze">
+        <label>3rd Place (+1 Strike):</label>
+        <select [(ngModel)]="thirdPlace">
+          <option value="" disabled>Select Loser</option>
+          <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="action-btn submit-btn" (click)="submitResults()">COMMIT RESULTS</button>
+  </div>
+
+</div>
