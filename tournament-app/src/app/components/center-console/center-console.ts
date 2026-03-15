@@ -72,6 +72,28 @@ export class CenterConsoleComponent implements OnInit {
     this.gameEngine.setPhase('playing');
   }
 
+  // NEW: Smart Swap and Auto-Fill Logic
+  onPlayerSelected(changedPosition: 'first' | 'second' | 'third', newPlayer: PlayerName | '') {
+    if (!newPlayer) return;
+
+    // 1. Swap Logic: If they were already in another position, clear that old position
+    if (changedPosition !== 'first' && this.firstPlace === newPlayer) this.firstPlace = '';
+    if (changedPosition !== 'second' && this.secondPlace === newPlayer) this.secondPlace = '';
+    if (changedPosition !== 'third' && this.thirdPlace === newPlayer) this.thirdPlace = '';
+
+    // 2. Auto-Fill Logic: See exactly who has been assigned
+    const assignedPlayers = [this.firstPlace, this.secondPlace, this.thirdPlace].filter(p => p !== '');
+
+    // If exactly 2 players are locked in, find the missing 3rd and assign them!
+    if (assignedPlayers.length === 2) {
+      const remainingPlayer = this.playerList.find(p => !assignedPlayers.includes(p)) as PlayerName | '';
+      
+      if (!this.firstPlace) this.firstPlace = remainingPlayer;
+      else if (!this.secondPlace) this.secondPlace = remainingPlayer;
+      else if (!this.thirdPlace) this.thirdPlace = remainingPlayer;
+    }
+  }
+
   submitResults() {
     if (!this.firstPlace || !this.secondPlace || !this.thirdPlace) {
       alert('Please select a player for all three positions!');

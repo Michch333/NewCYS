@@ -56,21 +56,23 @@
       <div class="scoring-grid">
         <div class="score-row gold">
           <label>1st Place (1 pt):</label>
-          <select [(ngModel)]="firstPlace">
+          <select [(ngModel)]="firstPlace" (ngModelChange)="onPlayerSelected('first', $event)">
             <option value="" disabled>Select Winner</option>
             <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
           </select>
         </div>
+        
         <div class="score-row silver">
           <label>2nd Place (Safe):</label>
-          <select [(ngModel)]="secondPlace">
+          <select [(ngModel)]="secondPlace" (ngModelChange)="onPlayerSelected('second', $event)">
             <option value="" disabled>Select Runner-Up</option>
             <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
           </select>
         </div>
+        
         <div class="score-row bronze">
           <label>3rd Place (+1 Strike):</label>
-          <select [(ngModel)]="thirdPlace">
+          <select [(ngModel)]="thirdPlace" (ngModelChange)="onPlayerSelected('third', $event)">
             <option value="" disabled>Select Loser</option>
             <option *ngFor="let p of playerList" [value]="p">{{ p }}</option>
           </select>
