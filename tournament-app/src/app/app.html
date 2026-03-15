@@ -1,13 +1,11 @@
 <main class="game-board">
   
   <section class="corner-zone top-left">
-    <h2>Mike</h2>
-    <p>Points: 0</p>
+    <app-player-card [player]="mike"></app-player-card>
   </section>
 
   <section class="corner-zone top-right">
-    <h2>Greg</h2>
-    <p>Points: 0</p>
+    <app-player-card [player]="greg"></app-player-card>
   </section>
 
   <section class="center-console-zone">
@@ -18,13 +16,12 @@
   </section>
 
   <section class="corner-zone bottom-left">
-    <h2>Jason</h2>
-    <p>Points: 0</p>
+    <app-player-card [player]="jason"></app-player-card>
   </section>
 
   <section class="corner-zone bottom-right tools-zone">
     <h2>Quick Tools</h2>
-    <button>Roll d60</button>
+    <button (click)="testSimulateGame()">Simulate Game</button>
   </section>
 
-  </main>
+</main>
