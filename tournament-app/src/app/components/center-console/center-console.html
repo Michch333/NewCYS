@@ -21,17 +21,30 @@
 
       <div class="divider-text">- OR TYPE A NEW ONE -</div>
 
-      <div class="input-group">
+     <div class="input-group">
         <label>Video Game Title:</label>
-        <input type="text" [(ngModel)]="gameName" placeholder="e.g. Fortnite" />
+        <input type="text" [(ngModel)]="gameName" (input)="onManualInputChange()" placeholder="e.g. Fortnite" />
       </div>
       <div class="input-group">
         <label>House Rules (Optional):</label>
-        <textarea [(ngModel)]="gameRules" placeholder="e.g. No builds..."></textarea>
+        <textarea [(ngModel)]="gameRules" (input)="onManualInputChange()" placeholder="e.g. No builds..."></textarea>
       </div>
-      <button class="action-btn start-btn" (click)="startGame()">LOCK IT IN</button>
-    </div>
 
+      <div class="game-stats-card" *ngIf="selectedGameStats">
+        <div class="stat-header">
+          <span class="champ-crown">👑 Reigning Champ: {{ selectedGameStats.currentChamp }}</span>
+          <span class="times-played">Played {{ selectedGameStats.timesPlayed }} times</span>
+        </div>
+        <div class="stat-breakdown">
+          <div class="stat-box mike">Mike: {{ selectedGameStats.mikeWins }}</div>
+          <div class="stat-box greg">Greg: {{ selectedGameStats.gregWins }}</div>
+          <div class="stat-box jason">Jason: {{ selectedGameStats.jasonWins }}</div>
+        </div>
+      </div>
+
+      <button class="action-btn start-btn" (click)="startGame()">LOCK IT IN</button>
+    </div>  
+      
     <div class="phase-container" *ngIf="currentState.phase === 'playing'">
       <div class="active-game-header">
         <h2>Now Playing: {{ gameName }}</h2>
@@ -65,6 +78,7 @@
       </div>
       <button class="action-btn submit-btn" (click)="submitResults()">COMMIT RESULTS</button>
     </div>
+
   </ng-container>
 
   <div class="phase-container history-view" *ngIf="viewingHistory">

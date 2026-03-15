@@ -165,4 +165,50 @@
   margin: 5px 0;
   letter-spacing: 2px;
 }
+
+/* --- SCOUTING REPORT CARD --- */
+.game-stats-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #008cba;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 10px;
+  animation: fadeIn 0.3s ease-in;
+
+  .stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+
+    .champ-crown { color: #FFD700; font-weight: bold; font-size: 1.1rem; }
+    .times-played { color: #a0a0b5; font-size: 0.9rem; font-weight: bold; }
+  }
+
+  .stat-breakdown {
+    display: flex;
+    justify-content: space-between;
+    
+    .stat-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      flex: 1;
+      text-align: center;
+      margin: 0 4px;
+
+      /* You can customize these colors to match each player's vibe! */
+      &.mike { color: #ff6b6b; border-bottom: 2px solid #ff6b6b; } 
+      &.greg { color: #4ecdc4; border-bottom: 2px solid #4ecdc4; }
+      &.jason { color: #ffe66d; border-bottom: 2px solid #ffe66d; }
+
+      &:first-child { margin-left: 0; }
+      &:last-child { margin-right: 0; }
+    }
+  }
+}
 }

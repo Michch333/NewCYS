@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { GameEngineService } from '../../services/game-engine'; 
-import { PlayerName, TournamentState, GameRecord, LifetimeRecord } from '../../models/tournament.model'; // Added LifetimeRecord
+import { PlayerName, TournamentState, GameRecord, LifetimeRecord } from '../../models/tournament.model';
 
 @Component({
   selector: 'app-center-console',
@@ -16,9 +16,10 @@ export class CenterConsoleComponent implements OnInit {
   
   matchHistory: GameRecord[] = [];
   viewingHistory: boolean = false; 
-
-  // NEW: Store the sorted historical games for the dropdown
   sortedLifetimeStats: LifetimeRecord[] = [];
+  
+  // NEW: The currently viewed scouting report
+  selectedGameStats: LifetimeRecord | null = null;
   
   gameName: string = '';
   gameRules: string = '';
@@ -30,15 +31,8 @@ export class CenterConsoleComponent implements OnInit {
   constructor(private gameEngine: GameEngineService) {}
 
   ngOnInit() {
-    this.gameEngine.gameState$.subscribe(state => {
-      this.currentState = state;
-    });
-
-    this.gameEngine.history$.subscribe(history => {
-      this.matchHistory = history;
-    });
-
-    // NEW: Grab the lifetime stats, clone the array, and sort them alphabetically!
+    this.gameEngine.gameState$.subscribe(state => this.currentState = state);
+    this.gameEngine.history$.subscribe(history => this.matchHistory = history);
     this.gameEngine.lifetimeStats$.subscribe(stats => {
       this.sortedLifetimeStats = [...stats].sort((a, b) => a.gameName.localeCompare(b.gameName));
     });
@@ -46,16 +40,24 @@ export class CenterConsoleComponent implements OnInit {
     this.gameEngine.setPhase('selecting-game');
   }
 
-  // NEW: Auto-fill function when you select from the dropdown
+  // UPDATED: Now saves the stats so we can display them!
   loadHistoricalGame(indexStr: string) {
-    if (!indexStr) return; // Ignore if they select the placeholder
+    if (!indexStr) {
+      this.selectedGameStats = null; // Clear if they unselect
+      return; 
+    }
     
     const index = parseInt(indexStr, 10);
     const selectedRecord = this.sortedLifetimeStats[index];
     
-    // Auto-fill the text boxes
     this.gameName = selectedRecord.gameName;
     this.gameRules = selectedRecord.rules;
+    this.selectedGameStats = selectedRecord; // <-- Save the stats for the UI
+  }
+
+  // NEW: Clear the stats card if someone manually edits the text boxes
+  onManualInputChange() {
+    this.selectedGameStats = null;
   }
 
   toggleHistory() {
@@ -84,10 +86,12 @@ export class CenterConsoleComponent implements OnInit {
 
     this.gameEngine.commitGameResults(this.gameName, this.gameRules, this.firstPlace, this.secondPlace, this.thirdPlace);
     
+    // Clear everything for the next round
     this.gameName = '';
     this.gameRules = '';
     this.firstPlace = '';
     this.secondPlace = '';
     this.thirdPlace = '';
+    this.selectedGameStats = null; // <-- Clear the stats card
   }
 }
