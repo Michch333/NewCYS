@@ -79,7 +79,6 @@
 
 </div>
 
-
 <div class="modal-overlay" *ngIf="viewingHistory" (click)="toggleHistory()">
   
   <div class="modal-content" (click)="$event.stopPropagation()">
@@ -99,6 +98,7 @@
     </div>
 
     <div class="modal-body">
+      
       <div class="tab-content" *ngIf="activeHistoryTab === 'current'">
         <p class="empty-state" *ngIf="matchHistory.length === 0">No games played yet tonight!</p>
         <div class="history-list">
@@ -117,29 +117,48 @@
       </div>
 
       <div class="tab-content" *ngIf="activeHistoryTab === 'lifetime'">
-      
-      <div class="search-container">
-        <input type="text" [(ngModel)]="searchQuery" placeholder="🔍 Search games or rules..." class="search-input" />
-      </div>
-
-      <div class="history-list">
-        <div class="lifetime-card" *ngFor="let stat of filteredLifetimeStats">
-          
-          <div class="lifetime-header">
-            <span class="game-name">{{ stat.gameName }} <span class="rules" *ngIf="stat.rules">({{ stat.rules }})</span></span>
-            <span class="champ-crown" *ngIf="stat.currentChamp">👑 {{ stat.currentChamp }}</span>
-          </div>
-          
-          <div class="lifetime-stats-grid">
-            <div class="stat mike">M: {{ stat.mikeWins }}</div>
-            <div class="stat greg">G: {{ stat.gregWins }}</div>
-            <div class="stat jason">J: {{ stat.jasonWins }}</div>
-            <div class="stat total">Total: {{ stat.timesPlayed }}</div>
-          </div>
-          
-        </div>
         
-        <p class="empty-state" *ngIf="filteredLifetimeStats.length === 0">No matching games found.</p>
+        <div class="search-container">
+          <input type="text" [(ngModel)]="searchQuery" placeholder="🔍 Search games or rules..." class="search-input" />
+        </div>
+
+        <div class="champ-leaderboard">
+          <div class="leader-box mike">
+            <span class="name">Mike</span>
+            <span class="belt">🏆 {{ mikeChamps }} Games</span>
+          </div>
+          <div class="leader-box greg">
+            <span class="name">Greg</span>
+            <span class="belt">🏆 {{ gregChamps }} Games</span>
+          </div>
+          <div class="leader-box jason">
+            <span class="name">Jason</span>
+            <span class="belt">🏆 {{ jasonChamps }} Games</span>
+          </div>
+        </div>
+
+        <div class="history-list">
+          <div class="lifetime-row" *ngFor="let stat of filteredLifetimeStats">
+            
+            <div class="info-col">
+              <span class="game-name">{{ stat.gameName }}</span>
+              <span class="rules" *ngIf="stat.rules">{{ stat.rules }}</span>
+              <span class="champ-crown" *ngIf="stat.currentChamp">👑 {{ stat.currentChamp }}</span>
+            </div>
+            
+            <div class="stats-col">
+              <div class="stat-pill mike">M: {{ stat.mikeWins }}</div>
+              <div class="stat-pill greg">G: {{ stat.gregWins }}</div>
+              <div class="stat-pill jason">J: {{ stat.jasonWins }}</div>
+              <div class="stat-pill total">Total: {{ stat.timesPlayed }}</div>
+            </div>
+            
+          </div>
+          
+          <p class="empty-state" *ngIf="filteredLifetimeStats.length === 0">No matching games found.</p>
+        </div>
+
       </div>
     </div>
+  </div>
 </div>

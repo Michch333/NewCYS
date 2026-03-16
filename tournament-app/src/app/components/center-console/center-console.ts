@@ -54,6 +54,19 @@ export class CenterConsoleComponent implements OnInit {
     );
   }
 
+// --- CHAMPIONSHIP COUNTERS ---
+  get mikeChamps(): number {
+    return this.sortedLifetimeStats.filter(stat => stat.currentChamp === 'Mike').length;
+  }
+
+  get gregChamps(): number {
+    return this.sortedLifetimeStats.filter(stat => stat.currentChamp === 'Greg').length;
+  }
+
+  get jasonChamps(): number {
+    return this.sortedLifetimeStats.filter(stat => stat.currentChamp === 'Jason').length;
+  }
+
   setHistoryTab(tab: 'current' | 'lifetime') {
     this.activeHistoryTab = tab;
   }
